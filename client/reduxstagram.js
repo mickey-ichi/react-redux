@@ -2,12 +2,13 @@ import React from 'react';
 
 import {render} from 'react-dom';
 //import css
-import './styles/style.sass';
+import './styles/style.scss';
+import './styles/animation.scss';
 
 //import components
 import Main from './components/Main';
-import PhotoGird from './components/PhotoGird';
-import Single from './components/Single';
+import PhotoGird from './components/photo-gird/PhotoGird';
+import Single from './components/single/Single';
 
 
 //import react router
