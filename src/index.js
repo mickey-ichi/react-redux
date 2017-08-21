@@ -11,7 +11,11 @@ import registerServiceWorker from './registerServiceWorker';
 //import components
 import App from './containers/App';
 
+import rootSaga from './saga';
+
 let store = configureStore();
+
+store.runSaga(rootSaga);
 
 ReactDOM.render(
     <Provider store={store}>
