@@ -1,18 +1,15 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import {createStore, applyMiddleware, compose} from 'redux';
 
 import createHistory from 'history/createBrowserHistory';
 
-import { routerMiddleware } from 'react-router-redux';
+import {routerMiddleware} from 'react-router-redux';
 
-import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 
 //import the root reducer
 import rootReducer from './reducers';
 
-let shareData = JSON.parse(window._sharedData);
-
-const defaultState = {
-};
+import rootSaga from './saga';
 
 // Create a history of your choosing (we're using a browser history in this case)
 const history = createHistory();
@@ -20,18 +17,19 @@ const history = createHistory();
 // Build the middleware for intercepting and dispatching navigation actions
 const middleware = routerMiddleware(history);
 
-const enhancers = compose(
-    window.devToolsExtension ? window.devToolsExtension() : f => f
-);
-
-const store = createStore(
-    rootReducer,
-    defaultState,
-    enhancers,
-    applyMiddleware(middleware, thunk)
-);
-
 export {history};
 
+const configureStore = () => {
+    const sagaMiddleware = createSagaMiddleware();
+    return {
+        ...createStore(
+            rootReducer,
+            compose(
+                applyMiddleware(sagaMiddleware, middleware),
+                window.devToolsExtension ? window.devToolsExtension() : f => f
+            )),
+        watchSaga: sagaMiddleware.run(rootSaga)
+    }
+};
 
-export default store;
+export default configureStore;
